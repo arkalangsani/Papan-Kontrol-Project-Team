@@ -1,5 +1,6 @@
 import Board from "@/components/Board";
 
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  return <Board projectSlug={params.slug} />;
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  return <Board projectSlug={slug} />;
 }

@@ -5,9 +5,9 @@ export const dynamic = "force-dynamic";
 
 const DEADLINE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const id = Number(params.id);
+    const id = Number((await params).id);
     if (!Number.isInteger(id)) {
       return NextResponse.json({ error: "ID tugas tidak valid." }, { status: 400 });
     }
@@ -47,9 +47,9 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const id = Number(params.id);
+    const id = Number((await params).id);
     if (!Number.isInteger(id)) {
       return NextResponse.json({ error: "ID tugas tidak valid." }, { status: 400 });
     }

@@ -3,9 +3,9 @@ import { deleteProject, getProjectBySlug, renameProject } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const project = await getProjectBySlug(params.slug);
+    const project = await getProjectBySlug((await params).slug);
     if (!project) {
       return NextResponse.json({ error: "Project tidak ditemukan." }, { status: 404 });
     }
@@ -16,9 +16,9 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
   }
 }
 
-export async function PATCH(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const project = await getProjectBySlug(params.slug);
+    const project = await getProjectBySlug((await params).slug);
     if (!project) {
       return NextResponse.json({ error: "Project tidak ditemukan." }, { status: 404 });
     }
@@ -37,9 +37,9 @@ export async function PATCH(request: NextRequest, { params }: { params: { slug: 
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const project = await getProjectBySlug(params.slug);
+    const project = await getProjectBySlug((await params).slug);
     if (!project) {
       return NextResponse.json({ error: "Project tidak ditemukan." }, { status: 404 });
     }
