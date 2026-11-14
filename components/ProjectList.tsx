@@ -5,6 +5,23 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { Project } from "@/lib/db";
 
+// Warna dasar kotak project. Nama kelas harus ditulis utuh (bukan dirakit)
+// supaya Tailwind mengenalinya. Dipilih dari id, jadi warna tiap project tetap.
+const PROJECT_COLORS = [
+  "bg-sky-100 border-sky-300 hover:border-sky-500",
+  "bg-emerald-100 border-emerald-300 hover:border-emerald-500",
+  "bg-amber-100 border-amber-300 hover:border-amber-500",
+  "bg-rose-100 border-rose-300 hover:border-rose-500",
+  "bg-violet-100 border-violet-300 hover:border-violet-500",
+  "bg-teal-100 border-teal-300 hover:border-teal-500",
+  "bg-orange-100 border-orange-300 hover:border-orange-500",
+  "bg-fuchsia-100 border-fuchsia-300 hover:border-fuchsia-500",
+  "bg-lime-100 border-lime-300 hover:border-lime-500",
+  "bg-cyan-100 border-cyan-300 hover:border-cyan-500",
+];
+
+const colorOf = (project: Project) => PROJECT_COLORS[project.id % PROJECT_COLORS.length];
+
 export default function ProjectList() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -192,7 +209,7 @@ export default function ProjectList() {
               <form
                 key={project.id}
                 onSubmit={(e) => handleRename(e, project)}
-                className="flex items-center gap-2 rounded-xl border border-indigo-300 bg-white px-4 py-3 shadow-sm"
+                className={`flex items-center gap-2 rounded-xl border px-4 py-3 shadow-sm ${colorOf(project)}`}
               >
                 <input
                   type="text"
@@ -220,7 +237,7 @@ export default function ProjectList() {
             ) : (
               <div
                 key={project.id}
-                className="flex items-center justify-between gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3.5 shadow-sm hover:border-indigo-400 hover:shadow"
+                className={`flex items-center justify-between gap-2 rounded-xl border px-4 py-3.5 shadow-sm hover:shadow ${colorOf(project)}`}
               >
                 <Link href={`/${project.slug}`} className="flex-1 font-semibold text-gray-900">
                   {project.name}
@@ -244,7 +261,7 @@ export default function ProjectList() {
                   </button>
                   <Link
                     href={`/${project.slug}`}
-                    className="ml-1 whitespace-nowrap text-sm text-gray-400 hover:text-indigo-600"
+                    className="ml-1 whitespace-nowrap text-sm text-gray-600 hover:text-indigo-700"
                   >
                     Buka →
                   </Link>
