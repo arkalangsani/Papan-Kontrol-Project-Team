@@ -20,7 +20,15 @@ const PROJECT_COLORS = [
   "bg-cyan-100 border-cyan-300 hover:border-cyan-500",
 ];
 
-const colorOf = (project: Project) => PROJECT_COLORS[project.id % PROJECT_COLORS.length];
+// Setelah palet di atas habis, tiap project baru dapat warna dari hue unik
+// (sudut emas 137.5° => tidak pernah sama dengan project lain, dan tetap tersebar).
+const HUE_COLOR =
+  "bg-[hsl(var(--h)_90%_93%)] border-[hsl(var(--h)_70%_78%)] hover:border-[hsl(var(--h)_70%_55%)]";
+
+const colorOf = (project: Project) =>
+  project.id < PROJECT_COLORS.length ? PROJECT_COLORS[project.id] : HUE_COLOR;
+const hueOf = (project: Project) =>
+  ({ "--h": (project.id * 137.508) % 360 }) as React.CSSProperties;
 
 export default function ProjectList() {
   const router = useRouter();
@@ -209,6 +217,7 @@ export default function ProjectList() {
               <form
                 key={project.id}
                 onSubmit={(e) => handleRename(e, project)}
+                style={hueOf(project)}
                 className={`flex items-center gap-2 rounded-xl border px-4 py-3 shadow-sm ${colorOf(project)}`}
               >
                 <input
@@ -237,6 +246,7 @@ export default function ProjectList() {
             ) : (
               <div
                 key={project.id}
+                style={hueOf(project)}
                 className={`flex items-center justify-between gap-2 rounded-xl border px-4 py-3.5 shadow-sm hover:shadow ${colorOf(project)}`}
               >
                 <Link href={`/${project.slug}`} className="flex-1 font-semibold text-gray-900">
